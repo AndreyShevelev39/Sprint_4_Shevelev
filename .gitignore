@@ -39,8 +39,3 @@ build/
 .DS_Store
 
 .idea/
-target/
-*.iml
-.mvn/
-mvnw
-mvnw.cmd
