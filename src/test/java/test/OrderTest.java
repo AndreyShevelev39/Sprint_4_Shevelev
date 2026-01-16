@@ -1,20 +1,15 @@
 package test;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import pageObjects.MainPage;
-import pageObjects.OrderPage;
+import page.objects.MainPage;
+import page.objects.OrderPage;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
-public class OrderTest {
-    private WebDriver driver;
+public class OrderTest extends BaseTest {
+
     private final String entryPoint;
     private final String name;
     private final String surname;
@@ -37,20 +32,12 @@ public class OrderTest {
         this.comment = comment;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Заказ. Кнопка: {0}, Клиент: {1} {2}")
     public static Object[][] getOrderData() {
         return new Object[][]{
                 {"header", "Антон", "Чехов", "ул. Садовая, 3", "Тверская", "+79001112233", "25.08.2024", "сутки", "Домофон 12"},
                 {"bottom", "Иван", "Грозный", "ул. Кремлевская, 1", "Охотный Ряд", "+79998887766", "01.09.2024", "двое суток", "Злой собакен"}
         };
-    }
-
-    @Before
-    public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
     }
 
     @Test
@@ -71,11 +58,6 @@ public class OrderTest {
         orderPage.confirmOrder();
 
         boolean isSuccess = orderPage.isOrderSuccessModalVisible();
-        assertTrue("Заказ не оформлен", isSuccess);
-    }
-
-    @After
-    public void tearDown() {
-        if (driver != null) driver.quit();
+        assertTrue("Заказ не был оформлен (модальное окно не появилось)", isSuccess);
     }
 }
